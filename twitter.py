@@ -22,7 +22,7 @@ login_button.submit()
 
 time.sleep(4)
 
-# defines comment possibilites (change to a list in the future and use a randomint() function to randomize the comment sent)
+# defines comment possibilites. comments can be added w/o updating code below because of random int function
 comments = ['Damn that looks good', 'fuck, i wish that was me', 'who wants to dick me down', 
 'that dick looks tastey asf', 'omg thats hot daddy', 'imagine ;)','thats so fucking sexy',
  'i want you to do dirty things to me', 'dm me you might get something special ;)', 
@@ -59,6 +59,7 @@ def find_reply_button():
 def scrollbottom():
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 
+# this didnt really work only liked abt 5-8 posts before breaking. 
 def feed_auto_like(x):
     likes = 0
     scrollbottom()
@@ -81,60 +82,58 @@ def feed_auto_like(x):
 
 # will comment and like posts through feed
 def feed_inter(x):
-    inter = 0 
+    inter = 0  # declares the counter
     while inter < x:
-        try:
-            time.sleep(numpy.random.randint(low= 2, high= 6))
+        try: #everything is in a try loop to catch all errors and continue regardless
+            time.sleep(numpy.random.randint(low= 2, high= 6)) # random sleep inorder to create a time gap between loops
 
+            # declares tweet as the code necessary to find a tweet
             tweet = driver.find_element_by_xpath("//*[@id='react-root']/div/div/div[2]/main/div/div/div/div/div/div[4]/div/div/section/div/div/div/div[1]/div/div/div/div/article/div/div[2]/div[1]")
             time.sleep(1)
-            tweet
-            tweet.click()
+            tweet  
+            tweet.click() #clicks on the tweet element
             
-            time.sleep(numpy.random.randint(low= 2, high= 6))
+            time.sleep(numpy.random.randint(low= 2, high= 6)) # random sleep again just so that everything isnt as predicatable (idk if that was necessary but added complexity to the code to make it a bit more challanging)
             
-            like_button = driver.find_element_by_xpath("//div[@data-testid='like']")
-            like_button
-            like_button.click()
+            like_button = driver.find_element_by_xpath("//div[@data-testid='like']") #sets variable = to code that finds like button element
+            like_button #finds like button element
+            like_button.click() #clicks element
             
-            comment_button = driver.find_element_by_xpath("//div[@data-testid='reply']")
-            comment_button
-            comment_button.click()
+            comment_button = driver.find_element_by_xpath("//div[@data-testid='reply']") 
+            comment_button #finds reply button
+            comment_button.click() #clicks reply button
             
             
-            comment_field = driver.find_element_by_xpath("//div[@data-testid='tweetTextarea_0']")
-            comment_selector = numpy.random.randint(low = 0, high = len(comments) -1)
-            comment_field.send_keys(comments[comment_selector])
+            comment_field = driver.find_element_by_xpath("//div[@data-testid='tweetTextarea_0']") #finds and declares comment_field? im not sure if when you set a variable = to a path if it calls it without having to state that variable on a seperate line lol... seems like it worked here.
+            comment_selector = numpy.random.randint(low = 0, high = len(comments) -1) # pretty proud of this one: declares a variable that will randomly select a comment (note i set it so that the highest comment is the len of the list -1 so if i add more comment possibilities i dont have to go back and change it here)
+            comment_field.send_keys(comments[comment_selector]) # sends random comment to comment field
 
-            time.sleep(numpy.random.randint(low= 2, high= 6))
+            time.sleep(numpy.random.randint(low= 2, high= 6)) # random sleep
 
-            reply_button = driver.find_element_by_xpath("//div[@data-testid='tweetButton']")
-            reply_button
-            reply_button.click()
-
-
+            reply_button = driver.find_element_by_xpath("//div[@data-testid='tweetButton']") # finds the actual button named reply
+            reply_button # calling the variable just to be sure
+            reply_button.click() # clicking the element 
 
 
+            time.sleep(numpy.random.randint(low= 1, high= 5)) #random sleep
 
-            time.sleep(numpy.random.randint(low= 1, high= 5))
+            back_button = driver.find_element_by_xpath("//*[@id='react-root']/div/div/div[2]/main/div/div/div/div/div/div[1]/div[1]/div/div/div/div/div[1]/div") # finds back button
+            back_button #called it just incase
+            back_button.click() # clicks that back button
 
-            back_button = driver.find_element_by_xpath("//*[@id='react-root']/div/div/div[2]/main/div/div/div/div/div/div[1]/div[1]/div/div/div/div/div[1]/div")
-            back_button
-            back_button.click()
+            time.sleep(numpy.random.randint(low= 1, high= 5)) #random sleep
 
-            time.sleep(numpy.random.randint(low= 1, high= 5))
+            driver.get('https://twitter.com/home') #reloads the page
 
-            driver.get('https://twitter.com/home')
+            time.sleep(numpy.random.randint(low= 40, high= 60)) # random long sleep to allow new posts to generate seeing that the function just targets the first post
 
-            time.sleep(numpy.random.randint(low= 40, high= 60))
-
-            driver.get('https://twitter.com/home')
+            driver.get('https://twitter.com/home') # refreshes one more time before starting the loop over again
 
 
-            inter += 1
+            inter += 1 # adds one to variable inter which is used to control how long the while loop goes for. 
 
-            print(inter, 'Sucessful Interactions')
-        except Exception: 
+            print(inter, 'Sucessful Interactions') # inter is also used to spit out a counter to the terminal for the user
+        except Exception: # pretty much if any error occurs it'll just refresh the page a few times and wait then continue which will continue the for loop. essentially just refreshes home page and waits if any error occurs
             print('an error occured. I will attempt to reload and try again')
             
             driver.get('https://twitter.com/home')
@@ -143,11 +142,11 @@ def feed_inter(x):
             
             driver.get('https://twitter.com/home')
 
-            print(Exception)
+            print(Exception) #this didnt fucking work lmao. i was hoping id be able to see the FULL error AND get it to continue without stopping 
 
             continue
 
 
 
 
-feed_inter(999999)
+feed_inter(999999) # calls the function above w the argument being how many "interactions" or loops you'd like the function to do :) 
